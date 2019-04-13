@@ -209,7 +209,17 @@ function extractEmails(str) {
 function getRectangleString(width, height) {
     let str = "";
     for (let i = 0; i < height; i++) {
+        if (i == 0) {
+            str = "┌" + "─".repeat(width - 2) + "┐\n";
+        }
+        else if (i == height - 1) {
+            str += "└" + "─".repeat(width - 2) + "┘\n";
+        }
+        else {
+            str += "│" + " ".repeat(width - 2) + "│\n"
+        }
     }
+    return str;
 }
 
 
@@ -229,7 +239,23 @@ function getRectangleString(width, height) {
  *
  */
 function encodeToRot13(str) {
-    throw new Error('Not implemented');
+	let k = "";
+	let s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	let r = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+	let b = false;
+	for (let i = 0; i < str.length; i++) {
+        b = false;
+		for (let j = 0; j < s.length; j++) {
+			if (str[i] == s[j]) {
+				k = k.concat(r[j]);
+				b = true;
+				break;
+			}
+		}
+		if (b == true) continue
+		k = k.concat(str[i]);
+	}
+	return k;
 }
 
 /**
@@ -246,7 +272,14 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-    throw new Error('Not implemented');
+    let str1 = "";
+    let str2 = value;
+    if (typeof str2 == "string") return true;
+    else if (typeof str2 == "object" && str2 != null) {
+        if(str1.__proto__ == str2.__proto__) return true;
+        else return false;
+    }
+    else return false;
 }
 
 
@@ -275,7 +308,13 @@ function isString(value) {
  *   'K♠' => 51
  */
 function getCardId(value) {
-    throw new Error('Not implemented');
+    let arr = [
+        'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
+        'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
+        'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
+        'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
+    ]
+    return arr.indexOf(value);
 }
 
 
