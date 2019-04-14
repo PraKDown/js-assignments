@@ -344,7 +344,13 @@ function get3TopItems(arr) {
  *   [ 1, '2' ] => 1
  */
 function getPositivesCount(arr) {
-   throw new Error('Not implemented');
+   return arr.filter(function (elem) {
+      if (typeof elem == "number") {
+         if (elem > 0) return true;
+         else return false;
+      }
+      else return false;
+   }).length;
 }
  
 /** 
@@ -397,7 +403,9 @@ function getItemsSum(arr) {
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
 function getFalsyValuesCount(arr) {
-   throw new Error('Not implemented');
+	return (arr.filter(function(elem) {
+      if (elem === false || elem === "" || elem === 0 || Number.isNaN(elem) || elem === undefined || elem === null) return true;
+  })).length;
 }
 
 /**
@@ -431,7 +439,7 @@ function findAllOccurences(arr, item) {
  *    ['rock', 'paper', 'scissors']     => 'rock,paper,scissors'
  */
 function toStringList(arr) {
-   throw new Error('Not implemented');
+   return arr.join();
 }
 
 
@@ -460,7 +468,13 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  */
 function sortCitiesArray(arr) {
-   throw new Error('Not implemented');
+   return arr.sort(function(a, b){
+      if (a.country > b.country) return 1;
+      else if (b.country > a.country) return -1;
+      else if (a.city > b.city) return 1;
+      else if (b.city > a.city) return -1;
+      else return 0;
+   });
 }
 
 /**
@@ -482,7 +496,13 @@ function sortCitiesArray(arr) {
  *           [0,0,0,0,1]]   
  */
 function getIdentityMatrix(n) {
-   throw new Error('Not implemented');
+	let arr = new Array(n);
+	return [...arr].map(function(elem, index) {
+		 let arr2 = new Array(n);
+		 let arr3 = [...arr2].fill(0, 0, arr2.length);
+		 arr3.splice(index, 1, 1);
+		 return arr3;
+	})
 }
 
 /**
@@ -499,7 +519,12 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-   throw new Error('Not implemented');
+   let arr1 = new Array(end - start + 1);
+   let k = start - 1;
+   return [...arr1].map(function (elem) {
+      k++;
+      return k;
+   })
 }
 
 /**
@@ -514,7 +539,14 @@ function getIntervalArray(start, end) {
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
 function distinct(arr) {
-   throw new Error('Not implemented');
+   let arr1 = []
+   return arr.filter(function (elem) {
+      if (arr1.indexOf(elem) != -1) return false;
+      else {
+         arr1.push(elem);
+         return true;
+      }
+   })
 }
 
 /**
@@ -548,7 +580,22 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-   throw new Error('Not implemented');
+	let arr = [];
+	array.map(function (elem) {
+		 let k = arr.indexOf(keySelector(elem));
+		 if (k == -1) {
+         arr.push(keySelector(elem))};
+   });
+   return arr.map(function (elem) {
+      let arr2 = array.slice();
+      let arr3 = [];
+      arr2.map(function (el) {
+         if (keySelector(el) == elem) {
+            arr3.push(valueSelector(el));
+         }
+      });
+      return [elem, arr3];
+   });
 }
 
 
@@ -564,7 +611,9 @@ function group(array, keySelector, valueSelector) {
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
 function selectMany(arr, childrenSelector) {
-    throw new Error('Not implemented');
+   return arr.reduce(function (acc, elem) {
+      return acc.concat(childrenSelector(elem));
+   }, [])
 }
 
 
@@ -581,7 +630,12 @@ function selectMany(arr, childrenSelector) {
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
 function getElementByIndexes(arr, indexes) {
-    throw new Error('Not implemented');
+	let k = indexes.length;
+	function ar(mas, l) {
+		if (l == k - 1) return mas[indexes[l]];
+		else return ar(mas[indexes[l]], l + 1);
+   }
+	return ar(arr, 0);
 }
 
 
@@ -604,7 +658,13 @@ function getElementByIndexes(arr, indexes) {
  * 
  */
 function swapHeadAndTail(arr) {
-    throw new Error('Not implemented');
+   if (arr.length == 0 || arr.length == 1) return arr;
+	let k = Math.floor(arr.length / 2);
+	let left = arr.slice(0, k);
+	let right = arr.slice(-k);
+	arr.splice(0, k, ...right);
+	arr.splice(-k, arr.length, ...left)
+	return arr;
 }
 
 
