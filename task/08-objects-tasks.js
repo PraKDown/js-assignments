@@ -23,7 +23,13 @@
  *    console.log(r.getArea());   // => 200
  */
 function Rectangle(width, height) {
-    throw new Error('Not implemented');
+    return {
+        width: width,
+        height: height,
+        getArea: function () {
+            return width * height;
+        }
+    }
 }
 
 
@@ -38,7 +44,7 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-    throw new Error('Not implemented');
+    return JSON.stringify(obj);
 }
 
 
@@ -55,6 +61,14 @@ function getJSON(obj) {
  */
 function fromJSON(proto, json) {
     throw new Error('Not implemented');
+    let obj = JSON.parse(json);
+    let k = new proto;
+    let arr = [];
+    console.log(k);
+    for (let key in obj) {
+        if(obj[key] != k[key]) k[key] = obj[key];
+    }
+    return k;
 }
 
 
@@ -106,34 +120,94 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
-const cssSelectorBuilder = {
+const cssSelectorBuilder = {    
+    selector: "",
+    elem: 0,
+    i: 0,
+    ps: 0,
+    pred: "",
+
+    stringify: function () {
+        return this.selector;
+    },
 
     element: function(value) {
-        throw new Error('Not implemented');
+        if (this.pred == "id" || this.pred == "class" || this.pred == "attr" || this.pred == "psC" || this.pred == "psE") throw new Error("Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element");
+        if (this.elem != 0) throw new Error ("Element, id and pseudo-element should not occur more then one time inside the selector");
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + value;
+        newobj.elem = 1;
+        return newobj;
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        if (this.pred == "class" || this.pred == "attr" || this.pred == "psC" || this.pred == "psE") throw new Error("Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element");
+        if (this.i != 0) throw new Error ("Element, id and pseudo-element should not occur more then one time inside the selector");
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + "#" + value;
+        newobj.i = 1;
+        newobj.pred = "id";
+        return newobj;
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        if (this.pred == "attr" || this.pred == "psC" || this.pred == "psE") throw new Error("Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element");
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + "." + value;
+        newobj.pred = "class";
+        return newobj;
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        if (this.pred == "psC" || this.pred == "psE") throw new Error("Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element");
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + "[" + value + "]";
+        newobj.pred = "attr";
+        return newobj;
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        if (this.pred == "psE") throw new Error("Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element");
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + ":" + value;
+        newobj.pred = "psC"
+        return newobj;
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        if (this.ps != 0) throw new Error ("Element, id and pseudo-element should not occur more then one time inside the selector");
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + "::" + value;
+        newobj.ps = 1;
+        newobj.pred = "psE"
+        return newobj;
     },
 
     combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
+        let newobj = {};
+        for (var key in cssSelectorBuilder) {
+            newobj[key] = cssSelectorBuilder[key];
+        }
+        newobj.selector = this.selector + selector1.selector + " " + combinator + " " + selector2.selector;
+        return newobj;
     },
 };
 
