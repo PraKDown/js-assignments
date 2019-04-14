@@ -60,14 +60,7 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-    throw new Error('Not implemented');
-	let obj = JSON.parse(json);
-	let arr = [];
-	for (let key in obj) {
-			arr.push(obj[key]);
-	}
-	console.log(arr);
-	return new proto.constructor(...arr);
+    return Object.setPrototypeOf(JSON.parse(json), proto);
 }
 
 
